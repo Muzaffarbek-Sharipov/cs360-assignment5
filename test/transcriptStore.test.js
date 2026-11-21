@@ -54,4 +54,11 @@ describe("TranscriptStore", () => {
     assert.deepEqual(store.getStudentIDs(), [firstID]);
     assert.throws(() => store.deleteStudent(secondID), /Student not found/);
   });
+
+  test("name search trims whitespace and ignores case", () => {
+    const studentID = store.addStudent("Grace Lee");
+
+    assert.deepEqual(store.getStudentIDs("  grace LEE "), [studentID]);
+    assert.equal(store.getTranscript(studentID).student.studentName, "Grace Lee");
+  });
 });
