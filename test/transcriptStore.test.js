@@ -61,4 +61,13 @@ describe("TranscriptStore", () => {
     assert.deepEqual(store.getStudentIDs("  grace LEE "), [studentID]);
     assert.equal(store.getTranscript(studentID).student.studentName, "Grace Lee");
   });
+
+  test("deleting a student removes stored grades", () => {
+    const studentID = store.addStudent("Mia");
+    store.addGrade(studentID, "CS360", 88);
+
+    store.deleteStudent(studentID);
+
+    assert.equal(store.getGrade(studentID, "CS360"), undefined);
+  });
 });
