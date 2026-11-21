@@ -55,6 +55,18 @@ describe("TranscriptStore", () => {
     assert.throws(() => store.deleteStudent(secondID), /Student not found/);
   });
 
+  test("rejects a second grade for the same student and course", () => {
+    const studentID = store.addStudent("Omar");
+    store.addGrade(studentID, "cs360", 80);
+
+    assert.throws(
+      () => store.addGrade(studentID, "CS360", 95),
+      /Grade already exists for course CS360/,
+    );
+    assert.equal(store.getGrade(studentID, "CS360"), 80);
+    assert.equal(store.changeGrade(studentID, "CS360", 95).grade, 95);
+  });
+
   test("name search trims whitespace and ignores case", () => {
     const studentID = store.addStudent("Grace Lee");
 
