@@ -55,6 +55,21 @@ describe("TranscriptStore", () => {
     assert.throws(() => store.deleteStudent(secondID), /Student not found/);
   });
 
+  test("changeGrade applies the same course and grade validation", () => {
+    const studentID = store.addStudent("Eve");
+    store.addGrade(studentID, "CS360", 70);
+
+    assert.throws(() => store.changeGrade(studentID, " ", 90), /Course name is required/);
+    assert.throws(
+      () => store.changeGrade(studentID, "CS360", -1),
+      /Grade must be an integer from 0 to 100/,
+    );
+    assert.throws(
+      () => store.changeGrade(studentID, "CS360", 1.5),
+      /Grade must be an integer from 0 to 100/,
+    );
+  });
+
   test("rejects a second grade for the same student and course", () => {
     const studentID = store.addStudent("Omar");
     store.addGrade(studentID, "cs360", 80);
